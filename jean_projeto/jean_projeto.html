@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Criar Perguntas</title>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="paginaPrincipal">
+    <div data-role="header">
+        <h1>Criar Perguntas</h1>
+    </div>
+
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true" id="listaPerguntas">
+            <!-- Lista de perguntas será exibida aqui -->
+        </ul>
+        <a href="#paginaCriarPergunta" data-role="button" data-icon="plus" data-iconpos="right">Nova Pergunta</a>
+    </div>
+</div>
+
+<div data-role="page" id="paginaCriarPergunta">
+    <div data-role="header">
+        <a href="#paginaPrincipal" class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all">Voltar</a>
+        <h1>Nova Pergunta</h1>
+    </div>
+
+    <div data-role="content">
+        <form id="formNovaPergunta">
+            <label for="pergunta">Pergunta:</label>
+            <input type="text" id="pergunta" name="pergunta" required>
+
+            <fieldset data-role="controlgroup">
+                <legend>Tipo de Resposta:</legend>
+                <input type="radio" name="tipoResposta" id="respostaAberta" value="aberta" checked>
+                <label for="respostaAberta">Resposta Aberta</label>
+
+                <input type="radio" name="tipoResposta" id="respostaMultiplaEscolha" value="multiplaEscolha">
+                <label for="respostaMultiplaEscolha">Resposta de Múltipla Escolha</label>
+            </fieldset>
+
+            <div id="opcoesResposta" style="display: none;">
+                <label for="opcoes">Opções de Resposta (separadas por vírgula):</label>
+                <input type="text" id="opcoes" name="opcoes">
+            </div>
+
+            <button type="submit" data-icon="check" data-iconpos="right">Salvar Pergunta</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).on("pagecreate", "#paginaPrincipal", function () {
+        // Lógica para exibir a lista de perguntas na página principal
+        exibirListaPerguntas();
+    });
+
+    $(document).on("pagecreate", "#paginaCriarPergunta", function () {
+        
+// Lógica para mostrar ou ocultar as opções de resposta dependendo do tipo selecionado
+
+        $("#formNovaPergunta input[name='tipoResposta']").change(function () {
+            if ($(this).val() === "multiplaEscolha") {
+                $("#opcoesResposta").show();
+            } else {
+                $("#opcoesResposta").hide();
+            }
+        });
+
+        // Lógica para salvar a nova pergunta
+        $("#formNovaPergunta").submit(function (event) {
+            event.preventDefault();
+
+            var pergunta = $("#pergunta").val();
+            var tipoResposta = $("input[name='tipoResposta']:checked").val();
+            var opcoesResposta = $("#opcoes").val();
+
+          
+            $.mobile.changePage("#paginaPrincipal");
+        });
+    });
+
+    function exibirListaPerguntas() {
+        var perguntasExemplo = [
+"A quanto tempo você trabalha nesta empresa?", 
+"O quanto você sabe sobre riscos ocupacionais no ambiente de trabalho?", "Você se sente confortável no seu ambiente de trabalho?", 
+"Descreva o quanto você acha confortavel a sua postura no ambiente de trabalho.", 
+"Você sente algum desconforto ou dor na região das costas pescoço e ombros durante ou após o trabalho?",
+"Descreva o quanto você está satisfeito com a altura da sua mesa em relação a sua estatura."
+];
+        var listaPerguntas = $("#listaPerguntas");
+
+        listaPerguntas.empty();
+
+        perguntasExemplo.forEach(function (pergunta) {
+            var li = $("<li>").text(pergunta);
+            listaPerguntas.append(li);
+        });
+
+        listaPerguntas.listview("refresh"); // Atualizar o widget de lista do jQuery Mobile
+    }
+
+
+
+
+</script>
+
+</body>
+</html>
